@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Página de ejemplo</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="column">
+            <div class="row">
+                <!--Poner aqui cartas por defecto-->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Primera tarjeta</h5>
+                      <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                      </p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Segunda tarjeta</h5>
+                      <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                      </p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Tercera tarjeta</h5>
+                      <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis, ad facilis consequatur? Similique magni cumque natus placeat eius vel minus saepe iure expedita, sequi deserunt corporis molestias perferendis nobis tenetur unde.
+                      </p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+
+                </div>
+                <!--Espacio para generar script-->
+                <div id="tarjetas" style="display: flex; flex-direction: row; ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var i=1;
+        function loadCards(){
+
+            var object= {
+                titulo: "Card "+ i,
+                descripcion: "Texto de la card "+ i + "\n Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam corrupti nulla ut, quisquam odit aut accusamus, repellendus deserunt dolorem delectus tempore iure minus aspernatur impedit saepe quo reiciendis"
+            }
+            console.log("Mondongo")
+            var contenedor=document.createElement("div");
+            contenedor.setAttribute("class","card");
+            contenedor.setAttribute("style","width: 18 rem; margin:10%");
+            var body= document.createElement("div");
+            body.setAttribute("class","card-body");
+
+            var h5= document.createElement("h5");
+            h5.setAttribute("class","card-title");
+            h5.innerHTML = object.titulo;
+
+            var p = document.createElement("p");
+            p.setAttribute("class","card-text");
+            p.innerHTML= object.descripcion;
+
+            body.appendChild(h5);
+            body.appendChild(p);
+            contenedor.appendChild(body);
+
+            document.getElementById("tarjetas").appendChild(contenedor);
+
+        }
+
+        window.addEventListener('scroll', ()=>{
+            if((window.innerHeight + window.scrollY)>= document.body.offsetHeight && i<=100){
+                loadCards();
+                i++;
+            }
+        })
+    </script>
+</body>
+</html>
