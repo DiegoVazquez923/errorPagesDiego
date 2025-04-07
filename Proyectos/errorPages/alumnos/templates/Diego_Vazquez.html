@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Alumnos</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="main">
+        <header style="background-color: brown; padding: 2%;" class="text-center">
+            <h1>Alumnos</h1>
+        </header>
+        <div class="container" style="display: flex; flex-direction: row; justify-content: space-between;">
+
+            <div style="width: 40%; display: flex; flex-direction: column; background-color: aqua; padding: 20px; ">
+                <div class="col-6 mt-4">
+                    <form method="post" id="alumnoForm">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <p style="display: none;" id="id_al"></p>
+                        <button class="btn btn-success" type="submit">Guardar</button>
+                    </form>
+                    <div>
+                        <p id="mensaje"></p>
+                    </div> 
+                </div>
+            </div>
+        
+            <div class="card" style="width: 48%; display: flex; flex-direction: column; background-color: blue; padding: 20px;">
+                <ul class="list-group list-group-flush">
+                    <div id="alumnos"></div>
+                </ul>
+            </div>
+        </div>
+        <footer style="background-color: blueviolet; padding: 2%;" class="text-center">
+            <h1>Siguenos en redes sociales</h1>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+    //vamos a enviar la información del formulario por JS
+    //necesito seleccionar el formulario (id)
+    var form = document.getElementById("alumnoForm");
+
+    //En este contexto el evento es el comportamiento del formulario
+    form.addEventListener('submit', function(event){
+       event.preventDefault();
+
+       //Obtener info del form
+       let formData = new FormData(this)
+
+       //Convertirla a JSON
+       let jsonData ={};
+
+       //En este casdo, value es el valor del input y key es el name del input
+       formData.forEach((value,key) => jsonData[key]= value);
+       let id= document.getElementById("id_al").innerText;
+       if(!id){
+        fetch('/alumnos/api/',{
+          method: 'POST',
+          headers: {
+             'Content-Type':'application/json'
+          },
+          body:JSON.stringify(jsonData)
+       })
+       .then(response => response.json())
+       .then(data =>{
+          document.getElementById('mensaje').innerText= 'Registro exitoso';
+          cargarAlumnos();
+       })
+       .catch(error => console.log('Error: ',error))
+    }
+    else{
+        fetch(${"/alumnos/api/"},{
+          method: 'PUT',
+          headers: {
+             'Content-Type':'application/json'
+          },
+          body:JSON.stringify(jsonData)
+       })
+       .then(response => response.json())
+       .then(data =>{
+          document.getElementById('mensaje').innerText= 'Registro exitoso';
+          cargarAlumnos();
+       })
+       .catch(error => console.log('Error: ',error))
+    }
+       })
+    function cargarAlumnos() {
+        // Comunicarme con un endpoint
+        fetch('/alumnos/api')
+            .then(response => response.json())
+            .then(data => {
+                let alumnosDiv = document.getElementById("alumnos");
+                alumnosDiv.innerHTML = "";
+
+                data.forEach(alumno => {
+                    console.log(alumno)
+                    alumnosDiv.innerHTML += 
+                    `<div style="display: flex; flex-direction: row; margin-bottom: 10px; justify-content: space-between;">
+                        <div style="flex: 70%; display: flex; align-items: center;">
+                            <li class="list-group-item" style="display: flex; flex-direction: row; width: 100%;">${alumno.nombre}</li>
+                        </div>
+
+                        <div style="flex:30%; display: flex; justify-content: flex-end; align-items: center;">
+                            <button class="btn btn-warning editar-btn" style="margin-right: 5px; margin-left: 5px;" data-id="${alumno.id}">Editar</button>
+                            <button class="btn btn-danger">Eliminar</button>
+                        </div>
+                    </div>`;
+
+                });
+
+                // Aquí se puede separar la función de cargar los valores.
+                document.querySelectorAll('.editar-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const alumnoId = this.getAttribute('data-id');
+                        const alumno = data.find(a => a.id == alumnoId);
+                        console.log("Seleccionó", alumno);
+                        cargarValores(alumno);
+                    });
+                });
+            }).catch(error => console.error(error));
+        }
+
+        function cargarValores(alumno) {
+            document.getElementById("id_al").innerText = alumno.id;
+            document.getElementById("id_nombre").value = alumno.nombre;
+            document.getElementById("id_apellido").value = alumno.apellido;
+            document.getElementById("id_edad").value = alumno.edad;
+            document.getElementById("id_matricula").value = alumno.matricula;
+            document.getElementById("id_correo").value = alumno.correo;
+        }
+
+        cargarAlumnos();
+
+</script>
+</body>
+</html>

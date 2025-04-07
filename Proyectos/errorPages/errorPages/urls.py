@@ -15,7 +15,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
 
 #from app.views import index
 #from app.views import generar_error
@@ -32,4 +31,7 @@ urlpatterns = [
     path('error_logs/', error_logs, name='error_logs'),
     path('app/error_logs/', get_error_logs, name='get_error_logs'),
     path('users/', include('users.urls')),
+    path('productos/', include('productos.urls')),
+    path('categorias/', include('categorias.urls')),
+    path('alumnos/', include('alumnos.urls')),
 ]

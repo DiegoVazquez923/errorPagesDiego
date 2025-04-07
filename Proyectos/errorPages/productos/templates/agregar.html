@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .desvanecer{
+            opacity: 0;
+            animation:fadeIn 3.0s forwards
+        }
+
+        @keyframes fadeIn{
+            from {
+                opacity: 0;
+            }
+            to{
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut{
+            from {
+                opacity: 1;
+            }
+            to{
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInWZoom {
+            from { opacity:0; transform: scale(0.8);}
+            to{ opacity: 0; transform: scale(1.0);}
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container desvanecer">
+        <div class="col">
+            <div class="row">
+                <h1>Agregar Producto</h1>
+
+                <div class="col-6 mt-4">
+                    <form method="post" id="productoForm">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-success" type="submit">Guardar</button>
+    
+                        <a class="mt-5" href="#">Ver Productos</a>
+                    </form>   
+                    <div>
+                        <p id="mensaje"></p:id>
+                    </div>
+                </div>                
+
+                <!--Aquí está la vista de los productos--> 
+                <div class="col-6 mt-4">
+                    <h1>Lista de productos</h1>
+                    <div class="row" id="productos"></div>
+                </div>
+
+                <a href="https://www.utez.edu.mx">Ir a otro sitio</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+      //vamos a enviar la información del formulario por JS
+      //necesito seleccionar el formulario (id)
+      var form = document.getElementById("productoForm");
+
+      //En este contexto el evento es el comportamiento del formulario
+      form.addEventListener('submit', function(event){
+         event.preventDefault();
+
+         //Obtener info del form
+         let formData = new FormData(this)
+
+         //Convertirla a JSON
+         let jsonData ={};
+
+         //En este casdo, value es el valor del input y key es el name del input
+         formData.forEach((value,key) => jsonData[key]= value);
+
+         //Enviar los datos al back asincronamente
+         fetch('http://127.0.0.1:8000/productos/api/',{
+            method: 'POST',
+            headers: {
+               'Content-Type':'application/json',
+               'X-CSRFToken': getToken()
+            },
+            body:JSON.stringify(jsonData)
+         })
+         .then(response => response.json())
+         .then(data =>{
+            document.getElementById('mensaje').innerText= 'Registro exitoso';
+            cargarProductos();
+         })
+         .catch(error => console.log('Error: ',error))
+      })
+
+      function getToken(){
+         let cookieValue=null;
+         let cookies = document.cookie.split(';');
+
+         for(let i=0; i < cookies.length; i++){
+            let cookie= cookies[i].trim();
+            if(cookie.startsWith('csrftoken=')){
+               cookieValue= cookie.substring('csrftoken='.length,cookie.length);
+               break;
+            }
+         }
+         return cookieValue;
+      }
+
+      //usar fetch con promesas
+      function cargarProductos(){
+            //comunicarme ocn un endpoint
+
+            //url que retorna json
+            fetch('http://127.0.0.1:8000/productos/api/')
+            .then(response => response.json())
+                .then(data => {
+                    let productosDiv= document.getElementById("productos");
+                    productosDiv.innerHTML="";
+
+                    data.forEach(producto => {
+                        productosDiv.innerHTML += 
+                        `<div class="col-3"> 
+                            <strong> ${producto.nombre} </strong> </br> 
+                            - $${producto.precio} </br>
+                            <img src="${producto.imagen}" width="100"/> 
+                        </div>` 
+                    });
+                }).catch(error => console.error(error))
+
+        }
+
+        cargarProductos();
+  </script>
+
+  <script>
+    document.body.style.animation='fadeIn 5s forwards'
+
+    document.getElementById('productos').style.animation = 'fadeOut 70s forwards';
+
+    document.querySelectorAll('a').forEach(link =>{
+        link.addEventListener('click',function(event){
+            event.preventDefault();
+            document.body.style.animation = 'fadeOut 5.0s forwards';
+            setTimeout(() =>{
+                window.location.href = this.href;
+            },5000);
+    })
+    })
+  </script>
+</body>
+</html>

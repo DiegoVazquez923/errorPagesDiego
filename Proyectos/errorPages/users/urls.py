@@ -1,9 +1,27 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 from .views import *
-from django.contrib.auth.views import LogoutView
+from rest_framework_simplejwt.views import TokenRefreshView
+
+#Definir un router
+router = SimpleRouter()
+router.register(r'api',UserViewSet)
+
+#ProductoViewset:
+#ip:8000/productos/api/ <---- GET, POST de todo
+#ip:8000/productos/api/{id} <----- GET, PUT, DELETE de uno
 
 urlpatterns = [
-    path('register/', register_view, name='register'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('home/',home_view,name='home'),]
+    path('', include(router.urls)),
+    #Este es el path para iniciar sesión
+    #Es POST y espera que le mandemos email y password
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    #El siguiente path es para refrescar el token de sesión
+    #(Si es que eso queremos porque podriamos iniciar sesión de nuevo simplemente)
+    path('token/refresh/', TokenRefreshView.as_view(), name='Token_refresh'),
+    #Path que sirve el formulario
+    path('form/', CustomUserFormAPI.as_view(), name='formulario' ),
+    #URLS para envio y recuperación de contraseña
+    path("send-reset-email/", send_reset_email, name="send_reset_email"),
+    path("reset-password/", reset_password, name="reset_password"),
+]
